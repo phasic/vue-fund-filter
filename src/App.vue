@@ -44,7 +44,6 @@ import RangeSlider from "./components/RangeSlider";
 import SectorFilter from "./components/SectorFilter";
 import CurrencyFilter from "./components/CurrencyFilter";
 import DataTable from "./components/DataTable";
-import _ from "lodash";
 import MOCKDATA from "./assets/mock-data.js";
 
 export default {
@@ -59,8 +58,8 @@ export default {
     return {
       min: this._getDefaultMinimum(),
       max: this._getDefaultMaximum(),
-      selectedMin: null,
-      selectedMax: null,
+      selectedMin: this._getDefaultMinimum(),
+      selectedMax: this._getDefaultMaximum(),
       sectors: this._getDefaultSectors(),
       selectedSectors: this._getDefaultSectors(),
       currencies: this._getDefaultCurrencies(),

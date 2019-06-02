@@ -27,7 +27,7 @@ export default {
   },
   watch: {
     range: function(newRange) {
-      this.$emit("changedValuationFilter", {range: newRange});
+      this.$emit("changedValuationFilter", { range: newRange });
     }
   },
   created() {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-data-table :headers="headers" :items="filteredInstruments" class="elevation-1">
+    <v-data-table :headers="headers" :items="instruments" class="elevation-1">
       <template v-slot:items="props">
         <td>{{ props.item.isin }}</td>
         <td class="text-xs-left">{{ props.item.currency }}</td>
@@ -29,11 +29,6 @@ export default {
         { text: "Sector", align: "left", value: "sector" }
       ]
     };
-  },
-  watch: {
-    instruments: function(n, o) {
-      this.filteredInstruments = n;
-    }
   }
 };
 </script>

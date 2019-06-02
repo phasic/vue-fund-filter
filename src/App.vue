@@ -113,7 +113,6 @@ export default {
       this.selectedSectors = [...payload.sectors];
     },
     currencyFilterChanged(payload) {
-      console.log("in currencyfilterchanged");
       this.selectedCurrencies = [...payload.currencies];
     },
     _filterData(min, max, sectors, currencies) {

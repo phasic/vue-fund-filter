@@ -41,7 +41,7 @@
 <script>
 import ValuationFilter from "./components/ValuationFilter";
 import SectorFilter from "./components/SectorFilter";
-import CurrencyFilter from "./components/CurrencyFilter"
+import CurrencyFilter from "./components/CurrencyFilter";
 import DataTable from "./components/DataTable";
 import MOCKDATA from "./assets/mock-data.js";
 
@@ -55,6 +55,7 @@ export default {
   },
   data() {
     return {
+      data: MOCKDATA,
       min: null,
       max: null,
       selectedMin: null,
@@ -64,19 +65,6 @@ export default {
       currencies: null,
       selectedCurrencies: null
     };
-  },
-  computed: {
-    data: function() {
-      return this._getMockData();
-    },
-    filteredData: function() {
-      return this._filterData(
-        this.selectedMin,
-        this.selectedMax,
-        this.selectedSectors,
-        this.selectedCurrencies
-      );
-    }
   },
   created() {
     ({
@@ -90,10 +78,17 @@ export default {
       currencies: this.selectedCurrencies
     } = this._getDefaultValues());
   },
+  computed: {
+    filteredData: function() {
+      return this._filterData(
+        this.selectedMin,
+        this.selectedMax,
+        this.selectedSectors,
+        this.selectedCurrencies
+      );
+    }
+  },
   methods: {
-    _getMockData() {
-      return MOCKDATA;
-    },
     _getDefaultValues() {
       let sectors, currencies;
       let {
@@ -114,28 +109,28 @@ export default {
       [this.selectedMin, this.selectedMax] = payload.range;
     },
     sectorFilterChanged(payload) {
-      this.selectedSectors = [...payload.sectors];
+      this.selectedSectors =
+        payload.sectors.length < 1 ? this.sectors : [...payload.sectors];
     },
     currencyFilterChanged(payload) {
-      this.selectedCurrencies = [...payload.currencies];
+      this.selectedCurrencies =
+        payload.currencies.length < 1
+          ? this.currencies
+          : [...payload.currencies];
     },
     _filterData(min, max, sectors, currencies) {
-      const valuationFiltered = this.data.filter(
-        el => el.valuation >= min && el.valuation <= max
-      );
-      const sectorFiltered =
-        sectors.length === 0
-          ? valuationFiltered
-          : valuationFiltered.filter(
-              el => sectors && sectors.indexOf(el.sector) !== -1
-            );
-      const currencyFiltered =
-        currencies.length === 0
-          ? sectorFiltered
-          : sectorFiltered.filter(
-              el => currencies && currencies.indexOf(el.currency) !== -1
-            );
-      return currencyFiltered;
+      let filteredData = MOCKDATA;
+      const minMaxFilter = ({ key, min, max }, el) =>
+        el[key] >= min && el[key] <= max;
+
+      const arrayFilter = ({ key, array }, el) =>
+        array && array.indexOf(el[key]) !== -1;
+
+      filteredData = filteredData
+        .filter(minMaxFilter.bind(this, { key: "valuation", min, max }))
+        .filter(arrayFilter.bind(this, { key: "currency", array: currencies }))
+        .filter(arrayFilter.bind(this, { key: "sector", array: sectors }));
+      return filteredData;
     }
   }
 };

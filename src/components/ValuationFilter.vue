@@ -26,8 +26,8 @@ export default {
     };
   },
   watch: {
-    range: function(newRange) {
-      this.$emit("changedValuationFilter", { range: newRange });
+    range: function(range) {
+      this.$emit("changedValuationFilter", { range });
     }
   },
   created() {

@@ -10,25 +10,24 @@
 
     <v-content>
       <div class="padding-top">
-       
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
             <v-flex xs6>
-                <SectorFilter
-                  v-on:changedSectorFilter="sectorFilterChanged"
-                  v-bind:sectors="sectors"
-                />
+              <SectorFilter
+                v-on:changedSectorFilter="sectorFilterChanged"
+                v-bind:sectors="sectors"
+              />
             </v-flex>
             <v-flex xs6>
-                <CurrencyFilter
-                  v-on:changedCurrencyFilter="currencyFilterChanged"
-                  v-bind:currencies="currencies"
-                />
+              <CurrencyFilter
+                v-on:changedCurrencyFilter="currencyFilterChanged"
+                v-bind:currencies="currencies"
+              />
             </v-flex>
           </v-layout>
         </v-container>
-         <RangeSlider
-          v-on:changedSelection="rangeChanged"
+        <ValuationFilter
+          v-on:changedValuationFilter="valuationFilterChanged"
           v-bind:min="min"
           v-bind:max="max"
           v-bind:selectedMin="selectedMin"
@@ -40,30 +39,30 @@
 </template>
 
 <script>
-import RangeSlider from "./components/RangeSlider";
+import ValuationFilter from "./components/ValuationFilter";
 import SectorFilter from "./components/SectorFilter";
-import CurrencyFilter from "./components/CurrencyFilter";
+import CurrencyFilter from "./components/CurrencyFilter"
 import DataTable from "./components/DataTable";
 import MOCKDATA from "./assets/mock-data.js";
 
 export default {
   name: "App",
   components: {
-    RangeSlider,
+    ValuationFilter,
     SectorFilter,
     CurrencyFilter,
     DataTable
   },
   data() {
     return {
-      min: this._getDefaultMinimum(),
-      max: this._getDefaultMaximum(),
-      selectedMin: this._getDefaultMinimum(),
-      selectedMax: this._getDefaultMaximum(),
-      sectors: this._getDefaultSectors(),
-      selectedSectors: this._getDefaultSectors(),
-      currencies: this._getDefaultCurrencies(),
-      selectedCurrencies: this._getDefaultCurrencies()
+      min: null,
+      max: null,
+      selectedMin: null,
+      selectedMax: null,
+      sectors: null,
+      selectedSectors: null,
+      currencies: null,
+      selectedCurrencies: null
     };
   },
   computed: {
@@ -79,33 +78,39 @@ export default {
       );
     }
   },
+  created() {
+    ({
+      min: this.min,
+      min: this.selectedMin,
+      max: this.max,
+      max: this.selectedMax,
+      sectors: this.sectors,
+      sectors: this.selectedSectors,
+      currencies: this.currencies,
+      currencies: this.selectedCurrencies
+    } = this._getDefaultValues());
+  },
   methods: {
     _getMockData() {
       return MOCKDATA;
     },
-    _getDefaultMinimum() {
-      return Math.min.apply(
-        Math,
-        MOCKDATA.map(function(o) {
-          return Math.floor(o.valuation);
-        })
-      );
+    _getDefaultValues() {
+      let sectors, currencies;
+      let {
+        0: { valuation: min },
+        [MOCKDATA.length - 1]: { valuation: max }
+      } = MOCKDATA.sort((x, y) => x.valuation - y.valuation);
+
+      sectors = [...new Set(MOCKDATA.map(el => el.sector))];
+      currencies = [...new Set(MOCKDATA.map(el => el.currency))];
+      return {
+        min: Math.floor(min),
+        max: Math.ceil(max),
+        sectors,
+        currencies
+      };
     },
-    _getDefaultMaximum() {
-      return Math.max.apply(
-        Math,
-        MOCKDATA.map(function(o) {
-          return Math.ceil(o.valuation);
-        })
-      );
-    },
-    _getDefaultSectors() {
-      return [...new Set(MOCKDATA.map(el => el.sector))];
-    },
-    _getDefaultCurrencies() {
-      return [...new Set(MOCKDATA.map(el => el.currency))];
-    },
-    rangeChanged(payload) {
+    valuationFilterChanged(payload) {
       [this.selectedMin, this.selectedMax] = payload.range;
     },
     sectorFilterChanged(payload) {

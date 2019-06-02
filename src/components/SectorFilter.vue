@@ -3,7 +3,7 @@
     <v-subheader>Filter on sector</v-subheader>
     <v-combobox
       v-model="chips"
-      :items="items"
+      :items="sectors"
       label="Selected sectors"
       chips
       clearable
@@ -20,21 +20,15 @@
 </template>
 <script>
 export default {
-  props: ['sectors'],
+  props: ["sectors"],
   data() {
     return {
-      chips: [
-      ],
+      chips: []
     };
   },
-  computed: {
-    items: function() {
-      return this.sectors;
-    }
-  },
   watch: {
-    chips: function(newChips){
-      this.$emit("changedSectorFilter", {sectors: [...newChips]});
+    chips: function(sectors) {
+      this.$emit("changedSectorFilter", { sectors });
     }
   },
   methods: {

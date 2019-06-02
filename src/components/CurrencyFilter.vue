@@ -3,7 +3,7 @@
     <v-subheader>Filter on currency</v-subheader>
     <v-combobox
       v-model="chips"
-      :items="items"
+      :items="currencies"
       label="Selected currencies"
       chips
       clearable
@@ -20,21 +20,15 @@
 </template>
 <script>
 export default {
-  props: ['currencies'],
+  props: ["currencies"],
   data() {
     return {
-      chips: [
-      ],
+      chips: []
     };
   },
-  computed: {
-    items: function() {
-      return this.currencies;
-    }
-  },
   watch: {
-    chips: function(newChips){
-      this.$emit("changedCurrencyFilter", {currencies: [...newChips]});
+    chips: function(currencies) {
+      this.$emit("changedCurrencyFilter", { currencies });
     }
   },
   methods: {

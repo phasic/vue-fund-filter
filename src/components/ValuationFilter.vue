@@ -22,15 +22,12 @@ export default {
   props: ["min", "max"],
   data() {
     return {
-      selectedMin: null,
-      selectedMax: null,
       range: [null, null]
     };
   },
   watch: {
     range: function(newRange) {
-      [this.selectedMin, this.selectedMax] = newRange;
-      this.$emit("changedSelection", {range: newRange.slice(0,2)});
+      this.$emit("changedValuationFilter", {range: newRange});
     }
   },
   created() {

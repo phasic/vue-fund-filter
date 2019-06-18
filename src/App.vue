@@ -32,6 +32,8 @@
           v-bind:max="max"
           v-bind:selectedMin="selectedMin"
         />
+        <RadioSlider></RadioSlider>
+        <RadioSlider2></RadioSlider2>
         <DataTable v-bind:instruments="filteredData"/>
       </div>
     </v-content>
@@ -43,6 +45,8 @@ import ValuationFilter from "./components/ValuationFilter";
 import SectorFilter from "./components/SectorFilter";
 import CurrencyFilter from "./components/CurrencyFilter";
 import DataTable from "./components/DataTable";
+import RadioSlider from "./components/RadioSlider";
+import RadioSlider2 from "./components/RadioSlider2";
 import MOCKDATA from "./assets/mock-data.js";
 
 export default {
@@ -51,7 +55,9 @@ export default {
     ValuationFilter,
     SectorFilter,
     CurrencyFilter,
-    DataTable
+    DataTable,
+    RadioSlider,
+    RadioSlider2
   },
   data() {
     return {
